@@ -201,7 +201,10 @@ def _upb_proto_rule_impl(ctx):
         fail("proto_library rule must generate _UpbWrappedCcInfo or " +
              "_UpbDefsWrappedCcInfo (aspect should have handled this).")
 
-    lib = cc_info.linking_context.linker_inputs.to_list()[0].libraries[0]
+    if type(cc_info.linking_context.libraries_to_link) == "list":
+        lib = cc_info.linking_context.libraries_to_link[0]
+    else:
+        lib = cc_info.linking_context.libraries_to_link.to_list()[0]
     files = _filter_none([
         lib.static_library,
         lib.pic_static_library,
